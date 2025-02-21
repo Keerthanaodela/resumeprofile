@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KS Resume Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%; /* Wider container */
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2d4263;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: block;
+            margin: 20px auto;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background: #45a049;
+        }
+
+        .welcome-block {
+            text-align: center;
+            padding: 50px; /* Bigger padding */
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-block h1 {
+            font-size: 3em; /* Bigger font size */
+            color: #2d4263;
+            margin-bottom: 30px;
+        }
+
+        .login-signup {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .login-signup a {
+            text-decoration: none;
+            color: #2d4263;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: 2px solid #2d4263;
+            border-radius: 30px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .login-signup a:hover {
+            background: #2d4263;
+            color: white;
+        }
+
+        .login-form, .signup-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form h2, .signup-form h2 {
+            color: #2d4263;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .form-group button:hover {
+            background: #45a049;
+        }
+
+        .purpose-card {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 10px 0;
+        }
+
+        .purpose-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .resume-output {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .resume-output h2 {
+            color: #2d4263;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resume-output .section {
+            margin-bottom: 20px;
+        }
+
+        .resume-output .section h3 {
+            border-bottom: 2px solid #2d4263;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            color: #2d4263;
+        }
+
+        .resume-output .section p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .resume-output .contact-info {
+            display: block;
+        
+            margin-bottom: 20px;
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .resume-output .contact-info p {
+            margin: 0;
+            color: #555;
+        }
+
+        .resume-output .section {
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .resume-output .section h3 {
+            color: #2d4263;
+        }
+
+        .resume-output .section p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login/Sign-Up Icons -->
+        <div class="login-signup">
+            <a href="#" id="login-link">Login</a>
+            <a href="#" id="signup-link">Sign Up</a>
+        </div>
+
+        <!-- Welcome Page -->
+        <div class="page active" id="welcome-page">
+            <div class="welcome-block">
+                <h1>Welcome to Resume Builder</h1>
+                <button class="btn" id="get-started">Get Started</button>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div class="page" id="login-page">
+            <div class="login-form">
+                <h2>Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sign-Up Page -->
+        <div class="page" id="signup-page">
+            <div class="signup-form">
+                <h2>Sign Up</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name">Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Purpose Selection Page -->
+        <div class="page" id="purpose-page">
+            <h1>Choose Your Purpose</h1>
+            <div class="purpose-card" data-purpose="job">
+                <h3>Job Purpose</h3>
+                <p>For professionals looking to apply for jobs</p>
+            </div>
+            <div class="purpose-card" data-purpose="student">
+                <h3>Student Purpose</h3>
+                <p>For students and recent graduates</p>
+            </div>
+            <div class="purpose-card" data-purpose="external">
+                <h3>External Purpose</h3>
+                <p>For external projects or general use</p>
+            </div>
+        </div>
+
+        <!-- Resume Details Page -->
+        <div class="page" id="resume-page">
+            <h1>Resume Details</h1>
+            <form id="resume-form">
+                <!-- Personal Details -->
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" pattern="[0-9]{10}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn</label>
+                    <input type="url" id="linkedin">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" required>
+                </div>
+
+                <!-- Objective -->
+                <div class="form-group">
+                    <label for="objective">Objective</label>
+                    <textarea id="objective" rows="3" placeholder="Write your career objective here..." required></textarea>
+                </div>
+
+                <!-- Experience -->
+                <div class="form-group">
+                    <label for="experience">Professional Experience</label>
+                    <textarea id="experience" rows="4" placeholder="Describe your professional experience here..." required></textarea>
+                </div>
+
+                <!-- Education -->
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <textarea id="education" rows="2" placeholder="[Degree, University Name, Location, Month Year – Month Year, Relevant coursework, GPA]" required></textarea>
+                </div>
+
+                <!-- Skills -->
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <textarea id="skills" rows="3" placeholder="Technical Skills, Communication, Leadership & Management, Languages, Other Skills" required></textarea>
+                </div>
+
+                <!-- Certifications -->
+                <div class="form-group">
+                    <label for="certifications">Certifications & Training</label>
+                    <textarea id="certifications" rows="2" placeholder="[Certification Name], [Training Program]" required></textarea>
+                </div>
+
+                <!-- Awards -->
+                <div class="form-group">
+                    <label for="awards">Awards & Recognition</label>
+                    <textarea id="awards" rows="2" placeholder="List any awards or recognitions"></textarea>
+                </div>
+
+                <button class="btn" type="submit">Generate Resume</button>
+            </form>
+        </div>
+
+        <!-- Generated Resume Page -->
+        <div class="page" id="generated-resume-page">
+            <h1>Resume</h1>
+            <div class="resume-output" id="resume-output">
+                <!-- Resume content will be dynamically inserted here -->
+            </div>
+            <button class="btn" id="back-to-start">Back to Start</button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation Logic
+        const pages = document.querySelectorAll('.page');
+        const welcomePage = document.getElementById('welcome-page');
+        const loginPage = document.getElementById('login-page');
+        const signupPage = document.getElementById('signup-page');
+        const purposePage = document.getElementById('purpose-page');
+        const resumePage = document.getElementById('resume-page');
+        const generatedResumePage = document.getElementById('generated-resume-page');
+        const resumeOutput = document.getElementById('resume-output');
+
+        // Show Welcome Page
+        function showWelcomePage() {
+            pages.forEach(page => page.classList.remove('active'));
+            welcomePage.classList.add('active');
+        }
+
+        // Show Login Page
+        document.getElementById('login-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            pages.forEach(page => page.classList.remove('active'));
+            loginPage.classList.add('active');
+        });
+
+        // Show Sign-Up Page
+        document.getElementById('signup-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            pages.forEach(page => page.classList.remove('active'));
+            signupPage.classList.add('active');
+        });
+
+        // Handle Login Form Submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Simple validation (replace with actual authentication logic)
+            if (email && password) {
+                alert('Login successful!');
+                pages.forEach(page => page.classList.remove('active'));
+                purposePage.classList.add('active');
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        // Handle Sign-Up Form Submission
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            // Simple validation (replace with actual sign-up logic)
+            if (name && email && password) {
+                alert('Sign-up successful!');
+                pages.forEach(page => page.classList.remove('active'));
+                purposePage.classList.add('active');
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        // Show Purpose Page
+        document.getElementById('get-started').addEventListener('click', () => {
+            pages.forEach(page => page.classList.remove('active'));
+            purposePage.classList.add('active');
+        });
+
+        // Show Resume Page
+        document.querySelectorAll('.purpose-card').forEach(card => {
+            card.addEventListener('click', () => {
+                pages.forEach(page => page.classList.remove('active'));
+                resumePage.classList.add('active');
+            });
+        });
+
+        // Generate Resume
+        document.getElementById('resume-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect user input
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const address = document.getElementById('address').value;
+            const objective = document.getElementById('objective').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const skills = document.getElementById('skills').value;
+            const certifications = document.getElementById('certifications').value;
+            const awards = document.getElementById('awards').value;
+
+            // Generate Resume HTML
+            const resumeHTML = `
+                <h1>${name}</h1>
+                <div class="contact-info">
+                    <p>Phone: ${phone}</p>
+                    <p>Email: ${email}</p>
+                    <p>LinkedIn: ${linkedin}</p>
+                    <p>Address: ${address}</p>
+                </div>
+                <div class="section">
+                    <h3>Objective</h3>
+                    <p>${objective}</p>
+                </div>
+                <div class="section">
+                    <h3>Professional Experience</h3>
+                    <p>${experience}</p>
+                </div>
+                <div class="section">
+                    <h3>Education</h3>
+                    <p>${education}</p>
+                </div>
+                <div class="section">
+                    <h3>Skills</h3>
+                    <p>${skills}</p>
+                </div>
+                <div class="section">
+                    <h3>Certifications & Training</h3>
+                    <p>${certifications}</p>
+                </div>
+                <div class="section">
+                    <h3>Awards & Recognition</h3>
+                    <p>${awards}</p>
+                </div>
+            `;
+
+            // Display Generated Resume
+            resumeOutput.innerHTML = resumeHTML;
+            pages.forEach(page => page.classList.remove('active'));
+            generatedResumePage.classList.add('active');
+        });
+
+        // Back to Start
+        document.getElementById('back-to-start').addEventListener('click', showWelcomePage);
+    </script>
+</body>
+</html>
